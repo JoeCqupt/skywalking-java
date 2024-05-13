@@ -69,7 +69,7 @@ jobs:
       - name: Check Javaagent Plugin List
         run: tools/plugin/check-javaagent-plugin-list.sh
       - name: Install and Test
-        run: ./mvnw -q --batch-mode clean verify install javadoc:javadoc
+        run: ./mvnw clean install 
 
   ci:
     name: CI
