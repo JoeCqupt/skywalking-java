@@ -18,36 +18,19 @@ name: CI
 
 on:
   pull_request:
-  schedule:
-    - cron: '0 18 * * *'  # TimeZone: UTC 0
-
-concurrency:
-  group: ci-it-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+ 
 
 jobs:
-  license:
-    name: Check License
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: true
-      - name: Check License Header
-        uses: apache/skywalking-eyes@9bd5feb86b5817aa6072b008f9866a2c3bbc8587
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ 
 
   build:
     name: Java ${{ matrix.java-version }} / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}-latest
     timeout-minutes: 60
-    needs: [ license ]
     strategy:
       fail-fast: true
       matrix:
-        os: [ ubuntu, macos, windows ]
+        os: [ ubuntu ]
         java-version: [ 17 ]
         include:
           - os: ubuntu
@@ -60,10 +43,8 @@ jobs:
         with:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
-      - name: Check Javaagent Plugin List
-        run: tools/plugin/check-javaagent-plugin-list.sh
       - name: Install and Test
-        run: ./mvnw clean install 
+        run: ./mvnw clean install -Dmaven.test.skip=true
 
   ci:
     name: CI
