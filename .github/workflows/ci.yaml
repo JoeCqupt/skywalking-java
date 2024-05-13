@@ -13,16 +13,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 name: CI
-
 on:
   pull_request:
- 
-
 jobs:
- 
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -36,11 +30,4 @@ jobs:
           distribution: 'oracle'
           cache: maven
       - name: Install and Test
-        run: ./mvnw clean install -Dmaven.test.skip=true
-
-  ci:
-    name: CI
-    runs-on: ubuntu-latest
-    needs: [ build ]
-    steps:
-      - run: echo 'Success'
+        run: mvn clean install -Dmaven.test.skip=true
